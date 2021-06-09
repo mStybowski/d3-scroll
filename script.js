@@ -2,27 +2,25 @@ const items = [
     {
       name: "VOLVO",
       value: 86,
-      shiftValue: 0
+
     },
       {
       name: "TOYOTA",
-      shiftValue: 0
+      value: 76,
     },
       {
       name: "BMW",
-      shiftValue: 0
+      value: 46,
     },
       {
       name: "Mercedes",
-      shiftValue: 0
+      value: 62,
       }
-  ]
+]
   
-  let scrollValue = 0;
+let scrollValue = 0;
   
-  const mySVG = document.querySelector('svg')
-
-//   const myinte = setInterval(() => console.log(document.scrollY), 1500);/
+const mySVG = document.querySelector('svg')
 
 mySVG.onwheel = function(e) {
     let itemsToSend;
@@ -40,104 +38,52 @@ mySVG.onwheel = function(e) {
  const SVGElement = d3.select('svg')
  .attr('style', 'margin: 0 auto; display: block;')
 
- const SVGCanvas = SVGElement.append('g')
+ const SVGCanvas = SVGElement;
 
 const body = document.querySelector('body')
 body.style.background = '#090909';
 
- SVGCanvas.append('rect')          
- .attr('width', 600)
- .attr('height', 500)
- .attr('fill', '#7b7b7b')
- .attr('y', 0)
- .attr('x', 0)
+//  SVGCanvas.append('rect')          
+//  .attr('width', 600)
+//  .attr('height', 500)
+//  .attr('fill', '#7b7b7b')
+//  .attr('y', 0)
+//  .attr('x', 0)
 
+const rectFunct = (selection, dataFilter) => {
 
- const update = (itemsy) => {
+  selection
+    .selectAll("rect")
+    .data(dataFilter)
 
-  
-  // SVGCanvas.append('rect')        
-  //         .attr('width', 600)
-  //         .attr('height', 500)
-  //         .attr('fill', 'green')
-  
-  const rendery = SVGCanvas  
-          .selectAll(".my-rect")
-          .data(itemsy, d => d.name)
+  selection.enter().append('rect')
+    .classed("my-rect", true)
+    .attr('width', 600-60)
+    .attr('height', 35)
+    .attr('fill', 'white')
+    .attr('x', 30)
+    .attr('y', (d, i) => i*110-d.shiftValue)
 
-//           var bar = SVGCanvas.selectAll("g")
-//     .data(itemsy, d => d.name)
+  selection.exit().remove();
+}
 
-// bar
-//   .enter().append("g")
-//   .append('rect')
-//   .attr('width', 600-60)
-//   .attr('height', 35)
-//   .attr('fill', '#090909')
-//   .attr('x', 30)
-//   .attr('y', (d, i) => i*110-d.shiftValue)
+ const update = (items) => {
 
-//   bar.selectAll('rect')
-//   .attr('width', 600-60)
-//   .attr('height', 35)
-//   .attr('fill', '#090909')
-//   .attr('x', 30)
-//   .attr('y', (d, i) => i*110-d.shiftValue)
+  var gGroup = SVGCanvas
+    .selectAll("g")
+    .data(items, d => d.name);
 
-// bar
-//   .exit().remove();
+  let enterPhaseG = gGroup
+    .enter().append("g")
 
-// //   bar1.call(barSelection => {
-// //       barSelection
-// //       .append('rect')
-// //       .classed("my-rect", true)
-// //       .attr('width', 600-60)
-// //       .attr('height', 35)
-// //       .attr('fill', '#090909')
-// //       .attr('x', 30)
-// //       .attr('y', (d, i) => i*110-d.shiftValue)
+    gGroup
+      .call(gSelection => {
+            gSelection.call(rectFunc, (d) => [d])
 
-// //   })
+      })
 
-// //   let bar2 = bar.call(barSelection => {
-// //     barSelection
-// //     .append('rect')
-// //     .classed("my-rect", true)
-// //     .attr('width', 600-60)
-// //     .attr('height', 35)
-// //     .attr('fill', '#090909')
-// //     .attr('x', 30)
-// //     .attr('y', (d, i) => i*110-d.shiftValue)
-
-// // })
-
-// //   let bar3 = bar
-// //   .exit().remove();
-
-
-
-  rendery
-          .enter()
-          .append('rect')
-          .classed("my-rect", true)
-          .attr('width', 600-60)
-          .attr('height', 35)
-          .attr('fill', '#090909')
-          .attr('x', 30)
-          .attr('y', (d, i) => i*110-d.shiftValue)
-  
-  rendery
-        .call((sel) => {
-        sel        
-          .attr('width', 600-60)
-          .attr('height', 35)
-          .attr('fill', '#090909')
-          .attr('x', 30)
-          .attr('y', (d, i) => i*110-d.shiftValue)
-  })
-  
-  rendery
-  .exit().remove()
+  gGroup
+    .exit().remove();
   
 }
 
